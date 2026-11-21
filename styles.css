@@ -1099,9 +1099,15 @@ body[data-layout="elegant"] .menu-card {
    RESPONSIVE HERO
    ============================================= */
 @media (max-width: 600px) {
-  .hero-split { flex-direction: column; padding: 44px 20px 30px; }
-  .split-visual { width: 140px; height: 150px; }
-  .glass-card { padding: 28px 22px; }
+  .hero-split { flex-direction: column; padding: 36px 16px 24px; min-height: auto; }
+  .split-visual { width: 130px; height: 140px; }
+  .glass-card { padding: 24px 18px; }
+  .hero-cinematic { padding: 44px 16px 32px; }
+  .hero-glass { padding: 36px 16px; min-height: auto; }
+}
+@media (max-width: 380px) {
+  .split-visual { display: none; }
+  .glass-card { padding: 20px 14px; }
 }
 
 /* =============================================
@@ -1388,3 +1394,152 @@ body[data-layout="elegant"] .menu-card {
 /* =============================================
    PRINT — الطباعة تتم في نافذة منفصلة
    ============================================= */
+
+/* =============================================
+   RESPONSIVE — MOBILE FIRST (شامل)
+   ============================================= */
+
+/* ── 480px وأقل ── */
+@media (max-width: 480px) {
+
+  /* HERO */
+  .hero { min-height: auto; }
+  .hero-cinematic { padding: 48px 16px 28px; }
+  .hero-glass     { padding: 32px 14px; min-height: auto; }
+  .hero-split     { padding: 32px 16px 24px; gap: 14px; }
+
+  .hero-title     { font-size: clamp(1.6rem, 8vw, 2.4rem) !important; }
+  .hero-tagline   { font-size: .82rem !important; }
+  .hero-badge     { font-size: .68rem; padding: 4px 12px; }
+
+  /* إحصائيات الـ Hero — تقليص */
+  .hero-stats     { padding: 8px 10px; }
+  .stat           { padding: 0 8px; }
+  .stat-num       { font-size: .88rem; }
+  .stat-lbl       { font-size: .62rem; }
+  .stat-sep       { height: 24px; }
+
+  /* Glass card */
+  .glass-card     { padding: 22px 14px; }
+  .glass-icon     { font-size: 2.2rem; }
+  .glass-stats    { gap: 6px; }
+  .glass-stat     { padding: 4px 10px; font-size: .72rem; }
+
+  /* Split */
+  .split-visual   { width: 120px; height: 130px; }
+  .float-card     { padding: 7px 10px; }
+  .float-card:nth-child(3) { left: -5px; }
+
+  /* NAV */
+  .cat-btn        { padding: 7px 13px; font-size: .82rem; }
+  .cat-nav-inner  { padding: 10px 12px; gap: 5px; }
+
+  /* MENU GRID */
+  .menu-main      { padding: 20px 12px; }
+  .section-title  { font-size: 1.1rem; }
+  .section-icon   { width: 36px; height: 36px; font-size: 1rem; }
+
+  /* CARDS layout */
+  body[data-layout="cards"] .menu-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  body[data-layout="cards"] .card-media { height: 110px; }
+  body[data-layout="cards"] .card-body  { padding: 10px; }
+  body[data-layout="cards"] .card-name  { font-size: .85rem; }
+  body[data-layout="cards"] .card-desc  { font-size: .74rem; min-height: 28px; }
+  body[data-layout="cards"] .card-price { font-size: .88rem; }
+  body[data-layout="cards"] .card-badge { font-size: .62rem; padding: 2px 7px; }
+
+  /* LIST layout */
+  body[data-layout="list"] .card-media  { width: 70px; height: 70px; }
+  body[data-layout="list"] .card-body   { padding: 8px 10px; }
+  body[data-layout="list"] .card-name   { font-size: .85rem; }
+  body[data-layout="list"] .card-desc   { font-size: .75rem; }
+  body[data-layout="list"] .card-footer { padding: 8px 10px 8px 0; }
+  body[data-layout="list"] .card-price  { font-size: .82rem; }
+
+  /* ELEGANT layout */
+  body[data-layout="elegant"] .menu-grid  { grid-template-columns: 1fr 1fr; gap: 10px; }
+  body[data-layout="elegant"] .card-media { height: 110px; }
+  body[data-layout="elegant"] .card-body  { padding: 12px 14px; }
+  body[data-layout="elegant"] .card-name  { font-size: .9rem; }
+  body[data-layout="elegant"] .card-desc  { font-size: .75rem; }
+  body[data-layout="elegant"] .card-price { font-size: .95rem; }
+
+  /* MINIMAL layout */
+  body[data-layout="minimal"] .card-media { width: 52px; height: 52px; }
+  body[data-layout="minimal"] .card-name  { font-size: .85rem; }
+  body[data-layout="minimal"] .card-desc  { font-size: .72rem; }
+
+  /* ADD TO CART */
+  .add-to-cart-btn { font-size: .78rem; padding: 8px; }
+
+  /* CART FAB */
+  .cart-fab       { bottom: 16px; right: 14px; padding: 10px 14px 10px 12px; }
+  .cart-fab-total { display: none; } /* نخفي الإجمالي على الشاشات الصغيرة جداً */
+  .cart-fab-count { min-width: 20px; height: 20px; font-size: .72rem; }
+
+  /* CART DRAWER */
+  .cart-panel     { width: 100vw; }
+  .cart-header    { padding: 14px 16px; }
+  .cart-customer  { padding: 10px 14px; }
+  .cart-items     { padding: 8px 14px; }
+  .cart-summary   { padding: 10px 14px; }
+
+  .ci-thumb, .ci-emoji { width: 40px; height: 40px; }
+  .ci-name  { font-size: .82rem; }
+  .ci-unit  { font-size: .68rem; }
+  .ci-total { font-size: .78rem; min-width: 58px; }
+  .ci-qty button { width: 24px; height: 24px; font-size: .72rem; }
+  .ci-qty span    { min-width: 22px; font-size: .82rem; }
+
+  .btn-print  { padding: 10px; font-size: .88rem; }
+  .summary-total { font-size: .95rem; }
+
+  /* ADMIN DRAWER */
+  .admin-drawer   { width: 100vw; }
+  .admin-tabs     { top: 68px; }
+  .admin-section  { padding: 16px; }
+  .layout-grid    { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .layout-btn     { padding: 10px 4px; font-size: .72rem; }
+  .layout-btn i   { font-size: 1rem; }
+  .hero-style-grid { grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .bg-img-grid    { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .bg-img-btn img { height: 46px; }
+
+  /* LOGIN MODAL */
+  .login-box      { padding: 28px 20px; }
+  .login-title    { font-size: 1.2rem; }
+
+  /* FOOTER */
+  .footer         { padding: 24px 16px; }
+  .footer-logo    { font-size: 1.1rem; }
+
+  /* FABs — منع التداخل مع بعضها */
+  .cycle-fab      { bottom: 60px; left: 14px; }
+  .hero-style-fab { bottom: 14px; right: 14px; }
+}
+
+/* ── 360px وأقل ── */
+@media (max-width: 360px) {
+  body[data-layout="cards"] .menu-grid    { grid-template-columns: 1fr 1fr; gap: 8px; }
+  body[data-layout="elegant"] .menu-grid  { grid-template-columns: 1fr; }
+  .split-visual  { display: none; }
+  .hero-stats    { gap: 0; }
+  .stat          { padding: 0 6px; }
+  .hero-title    { font-size: clamp(1.4rem, 9vw, 2rem) !important; }
+  .cart-fab-total { display: none; }
+  .glass-card    { padding: 18px 12px; }
+  .glass-icon    { font-size: 1.8rem; margin-bottom: 8px; }
+}
+
+/* ── iOS Safe Area (notch & home bar) ── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .cart-fab {
+    bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+  .cart-panel {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .cat-nav {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+}
