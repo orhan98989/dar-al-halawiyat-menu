@@ -617,28 +617,30 @@ function renderMenu() {
       const badgeDisplay = item.badge
         ? `<span class="card-badge">${item.badge}</span>`
         : '';
-      const descDisplay = showDesc
-        ? `<p class="card-desc">${item.desc}</p>`
-        : '';
 
-      // الصورة — إذا كانت موجودة نستخدمها، وإلا نعرض إيموجي
+      // الصورة مع overlay الوصف عند الضغط
       const imgContent = item.img
-        ? `<img src="${item.img}" alt="${item.name}" class="card-img" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+        ? `<img src="${item.img}" alt="${item.name}" class="card-img" loading="lazy"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
            <div class="card-emoji-fallback" style="display:none">${item.emoji || '🍰'}</div>`
         : `<div class="card-emoji-fallback">${item.emoji || '🍰'}</div>`;
 
       card.innerHTML = `
-        <div class="card-media">${imgContent}</div>
+        <div class="card-media" onclick="toggleDesc(this)" role="button" aria-label="عرض الوصف">
+          ${imgContent}
+          <div class="card-desc-overlay">
+            <p>${item.desc || ''}</p>
+          </div>
+          ${badgeDisplay ? `<div class="card-badge-float">${item.badge}</div>` : ''}
+        </div>
         <div class="card-body">
           <h3 class="card-name">${item.name}</h3>
-          ${descDisplay}
           <div class="card-footer">
             ${priceDisplay}
-            ${badgeDisplay}
+            <button class="add-to-cart-btn" onclick="addToCart('${catKey}','${item.id}',event)">
+              <i class="fas fa-plus"></i> أضف
+            </button>
           </div>
-          <button class="add-to-cart-btn" onclick="addToCart('${catKey}','${item.id}',event)">
-            <i class="fas fa-plus"></i> أضف للسلة
-          </button>
         </div>
       `;
       grid.appendChild(card);
@@ -754,9 +756,21 @@ function togglePrices() {
   showPrices = document.getElementById('showPrices').checked;
   renderMenu();
 }
-function toggleDesc() {
+function toggleItemDesc() {
   showDesc = document.getElementById('showDesc').checked;
   renderMenu();
+}
+
+// toggle وصف البطاقة عند الضغط على الصورة
+function toggleDesc(mediaEl) {
+  const overlay = mediaEl.querySelector('.card-desc-overlay');
+  if (!overlay) return;
+  const isOpen = overlay.classList.contains('visible');
+  // أغلق كل الـ overlays المفتوحة أولاً
+  document.querySelectorAll('.card-desc-overlay.visible').forEach(o => {
+    if (o !== overlay) o.classList.remove('visible');
+  });
+  overlay.classList.toggle('visible', !isOpen);
 }
 function toggleDark() {
   isDark = document.getElementById('darkMode').checked;
