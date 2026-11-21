@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منيو المعجنات والحلويات</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-theme="orange" data-layout="cards">
+
+<!-- ===== ADMIN LOGIN MODAL ===== -->
+<div id="adminLoginModal" class="modal-overlay hidden">
+  <div class="login-box">
+    <div class="login-icon"><i class="fas fa-lock"></i></div>
+    <h2 class="login-title">لوحة التحكم</h2>
+    <p class="login-sub">أدخل كلمة المرور للمتابعة</p>
+    <div class="login-input-wrap">
+      <input type="password" id="adminPassInput" placeholder="••••••••"
+        onkeydown="if(event.key==='Enter')checkAdminPass()" autocomplete="off" />
+      <button class="login-eye" onclick="togglePassVis()"><i class="fas fa-eye" id="eyeIcon"></i></button>
+    </div>
+    <div id="loginError" class="login-error hidden">كلمة المرور غير صحيحة</div>
+    <button class="login-btn" onclick="checkAdminPass()">دخول <i class="fas fa-arrow-left"></i></button>
+    <button class="login-cancel" onclick="closeLoginModal()">إلغاء</button>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div id="adminPanel" class="admin-panel hidden">
+  <div class="admin-overlay" onclick="closeAdmin()"></div>
+  <div class="admin-drawer">
+
+    <div class="admin-header">
+      <div class="admin-header-left">
+        <div class="admin-avatar"><i class="fas fa-crown"></i></div>
+        <div>
+          <h2>لوحة التحكم</h2>
+          <span class="admin-role">مدير النظام</span>
+        </div>
+      </div>
+      <button class="admin-close" onclick="closeAdmin()"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- TABS -->
+    <div class="admin-tabs">
+      <button class="atab active" data-tab="general" onclick="switchTab('general',this)">
+        <i class="fas fa-sliders-h"></i> عام
+      </button>
+      <button class="atab" data-tab="items" onclick="switchTab('items',this)">
+        <i class="fas fa-utensils"></i> الأصناف
+      </button>
+      <button class="atab" data-tab="appearance" onclick="switchTab('appearance',this)">
+        <i class="fas fa-palette"></i> المظهر
+      </button>
+    </div>
+
+    <!-- TAB: GENERAL -->
+    <div class="tab-content active" id="tab-general">
+
+      <div class="admin-section">
+        <h3><i class="fas fa-store"></i> معلومات المحل</h3>
+        <div class="form-group">
+          <label>اسم المحل</label>
+          <input type="text" id="shopName" value="دار الحلويات" oninput="updateShopInfo()" />
+        </div>
+        <div class="form-group">
+          <label>الشعار الفرعي</label>
+          <input type="text" id="shopTagline" value="أرقى المعجنات والحلويات الشرقية والغربية" oninput="updateShopInfo()" />
+        </div>
+        <div class="form-group">
+          <label>رقم الهاتف</label>
+          <input type="text" id="shopPhone" value="+964 770 000 0000" oninput="updateShopInfo()" />
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h3><i class="fas fa-toggle-on"></i> خيارات العرض</h3>
+        <div class="toggle-row">
+          <span>إظهار الأسعار</span>
+          <label class="toggle"><input type="checkbox" id="showPrices" checked onchange="togglePrices()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>إظهار التوصيف</span>
+          <label class="toggle"><input type="checkbox" id="showDesc" checked onchange="toggleDesc()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>وضع الليل</span>
+          <label class="toggle"><input type="checkbox" id="darkMode" onchange="toggleDark()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h3><i class="fas fa-layer-group"></i> نموذج العرض</h3>
+        <div class="layout-grid">
+          <button class="layout-btn active" data-layout="cards" onclick="setLayout('cards')">
+            <i class="fas fa-th-large"></i><span>بطاقات</span>
+          </button>
+          <button class="layout-btn" data-layout="list" onclick="setLayout('list')">
+            <i class="fas fa-list"></i><span>قائمة</span>
+          </button>
+          <button class="layout-btn" data-layout="elegant" onclick="setLayout('elegant')">
+            <i class="fas fa-crown"></i><span>فاخر</span>
+          </button>
+          <button class="layout-btn" data-layout="minimal" onclick="setLayout('minimal')">
+            <i class="fas fa-minus"></i><span>بسيط</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB: ITEMS -->
+    <div class="tab-content" id="tab-items">
+
+      <div class="admin-section">
+        <h3><i class="fas fa-plus-circle"></i> إضافة صنف جديد</h3>
+        <div class="form-group">
+          <label>الفئة</label>
+          <select id="newCategory">
+            <option value="pastries">🥐 معجنات</option>
+            <option value="oriental">🌙 حلويات شرقية</option>
+            <option value="western">🎂 حلويات غربية</option>
+            <option value="drinks">☕ مشروبات</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>اسم الصنف</label>
+          <input type="text" id="newItemName" placeholder="مثال: كنافة بالقشطة" />
+        </div>
+        <div class="form-group">
+          <label>السعر (دينار عراقي)</label>
+          <input type="number" id="newItemPrice" placeholder="5000" />
+        </div>
+        <div class="form-group">
+          <label>الوصف</label>
+          <input type="text" id="newItemDesc" placeholder="وصف مختصر للصنف" />
+        </div>
+        <div class="form-group">
+          <label>الإيموجي (احتياطي إذا لم يكن رابط صورة)</label>
+          <input type="text" id="newItemEmoji" placeholder="🍰" />
+        </div>
+        <div class="form-group">
+          <label>الصورة</label>
+          <div class="img-picker">
+            <div class="img-preview-wrap" id="newImgPreview">
+              <div class="img-preview-empty"><i class="fas fa-image"></i></div>
+            </div>
+            <div class="img-picker-btns">
+              <label class="img-btn-gallery" title="اختر من المعرض">
+                <i class="fas fa-photo-film"></i> من المعرض
+                <input type="file" accept="image/*" style="display:none"
+                  onchange="handleNewImgFile(event)" />
+              </label>
+              <button class="img-btn-url" onclick="promptNewImgUrl()">
+                <i class="fas fa-link"></i> رابط
+              </button>
+              <button class="img-btn-clear" onclick="clearNewImg()" title="حذف الصورة">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <input type="hidden" id="newItemImg" />
+        </div>
+        <div class="form-group">
+          <label>الشارة (اختياري)</label>
+          <select id="newItemBadge">
+            <option value="">بدون شارة</option>
+            <option value="جديد">🆕 جديد</option>
+            <option value="الأكثر طلباً">🔥 الأكثر طلباً</option>
+            <option value="مفضل">⭐ مفضل</option>
+            <option value="مميز">👑 مميز</option>
+          </select>
+        </div>
+        <button class="admin-add-btn" onclick="addItem()"><i class="fas fa-plus"></i> إضافة الصنف</button>
+      </div>
+
+      <!-- EDIT EXISTING ITEMS -->
+      <div class="admin-section">
+        <h3><i class="fas fa-edit"></i> تعديل الأصناف الحالية</h3>
+        <div class="form-group">
+          <label>اختر الفئة</label>
+          <select id="editCatSelect" onchange="renderEditList()">
+            <option value="pastries">🥐 معجنات</option>
+            <option value="oriental">🌙 حلويات شرقية</option>
+            <option value="western">🎂 حلويات غربية</option>
+            <option value="drinks">☕ مشروبات</option>
+          </select>
+        </div>
+        <div id="editItemsList" class="edit-items-list"></div>
+      </div>
+
+    </div>
+
+    <!-- TAB: APPEARANCE -->
+    <div class="tab-content" id="tab-appearance">
+
+      <div class="admin-section">
+        <h3><i class="fas fa-image"></i> نموذج الواجهة (Hero)</h3>
+        <div class="hero-style-grid">
+          <button class="hero-style-btn active" data-hs="cinematic" onclick="setHeroStyle('cinematic',this)">
+            <div class="hs-preview hs-cinematic">🎬</div>
+            <span>سينمائي</span>
+          </button>
+          <button class="hero-style-btn" data-hs="glass" onclick="setHeroStyle('glass',this)">
+            <div class="hs-preview hs-glass">🪟</div>
+            <span>زجاجي 3D</span>
+          </button>
+          <button class="hero-style-btn" data-hs="split" onclick="setHeroStyle('split',this)">
+            <div class="hs-preview hs-split">✦</div>
+            <span>منقسم</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h3><i class="fas fa-photo-film"></i> صورة الخلفية</h3>
+        <div class="bg-img-grid" id="bgImgGrid">
+          <button class="bg-img-btn active" data-bg="0" onclick="setBgImg(0,this)">
+            <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=120&h=70&fit=crop" />
+            <span>معجنات</span>
+          </button>
+          <button class="bg-img-btn" data-bg="1" onclick="setBgImg(1,this)">
+            <img src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=120&h=70&fit=crop" />
+            <span>كيك</span>
+          </button>
+          <button class="bg-img-btn" data-bg="2" onclick="setBgImg(2,this)">
+            <img src="https://images.unsplash.com/photo-1579372786545-d24232daf58c?w=120&h=70&fit=crop" />
+            <span>كنافة</span>
+          </button>
+          <button class="bg-img-btn" data-bg="3" onclick="setBgImg(3,this)">
+            <img src="https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=120&h=70&fit=crop" />
+            <span>ماكرون</span>
+          </button>
+          <button class="bg-img-btn" data-bg="4" onclick="setBgImg(4,this)">
+            <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=120&h=70&fit=crop" />
+            <span>قهوة</span>
+          </button>
+          <button class="bg-img-btn" data-bg="5" onclick="setBgImg(5,this)">
+            <img src="https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=120&h=70&fit=crop" />
+            <span>وافل</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h3><i class="fas fa-palette"></i> الثيمات</h3>
+        <div class="theme-grid">
+          <button class="theme-btn active" data-theme="orange" onclick="setTheme('orange')">
+            <span class="theme-swatch" style="background:linear-gradient(135deg,#FF6B2C,#FFB347)"></span>
+            <span>برتقالي ذهبي</span>
+          </button>
+          <button class="theme-btn" data-theme="rose" onclick="setTheme('rose')">
+            <span class="theme-swatch" style="background:linear-gradient(135deg,#E91E8C,#FF6EB4)"></span>
+            <span>وردي راقي</span>
+          </button>
+          <button class="theme-btn" data-theme="emerald" onclick="setTheme('emerald')">
+            <span class="theme-swatch" style="background:linear-gradient(135deg,#0D9488,#34D399)"></span>
+            <span>زمردي نعناعي</span>
+          </button>
+          <button class="theme-btn" data-theme="royal" onclick="setTheme('royal')">
+            <span class="theme-swatch" style="background:linear-gradient(135deg,#4F46E5,#A78BFA)"></span>
+            <span>بنفسجي ملكي</span>
+          </button>
+          <button class="theme-btn" data-theme="mocha" onclick="setTheme('mocha')">
+            <span class="theme-swatch" style="background:linear-gradient(135deg,#92400E,#D97706)"></span>
+            <span>شوكولاته دافئ</span>
+          </button>
+          <button class="theme-btn" data-theme="midnight" onclick="setTheme('midnight')">
+            <span class="theme-swatch" style="background:linear-gradient(135deg,#0F172A,#334155)"></span>
+            <span>أسود فاخر</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LOGOUT -->
+    <div style="padding:20px 24px;">
+      <button class="logout-btn" onclick="logoutAdmin()">
+        <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div class="app" id="app">
+
+  <!-- HERO — data-hero-style يتحكم في النموذج -->
+  <header class="hero" id="hero" data-hero-style="cinematic">
+
+    <!-- طبقة الصورة الحقيقية -->
+    <div class="hero-img-layer" id="heroImgLayer"></div>
+    <!-- طبقة التدرج اللوني فوق الصورة -->
+    <div class="hero-overlay" id="heroOverlay"></div>
+    <!-- نقاط زخرفية -->
+    <div class="hero-pattern"></div>
+
+    <!-- نموذج 1: CINEMATIC -->
+    <div class="hero-content hero-cinematic" id="hc-cinematic">
+      <div class="hero-badge"><i class="fas fa-star"></i> منيو رسمي <i class="fas fa-star"></i></div>
+      <h1 class="hero-title" id="heroTitle"
+          onmousedown="startHoldTimer(event)" onmouseup="clearHoldTimer()"
+          onmouseleave="clearHoldTimer()" ontouchstart="startHoldTimer(event)"
+          ontouchend="clearHoldTimer()" ontouchcancel="clearHoldTimer()"
+          style="cursor:default;user-select:none;">
+        دار الحلويات
+        <div class="hold-ring" id="holdRing"></div>
+      </h1>
+      <p class="hero-tagline" id="heroTagline">أرقى المعجنات والحلويات الشرقية والغربية</p>
+      <div class="hero-divider"><span></span><i class="fas fa-cookie-bite"></i><span></span></div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">+50</span><span class="stat-lbl">صنف شهي</span></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><span class="stat-num">يومي</span><span class="stat-lbl">طازج</span></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><span class="stat-num">★ 4.9</span><span class="stat-lbl">تقييم</span></div>
+      </div>
+    </div>
+
+    <!-- نموذج 2: GLASS (بطاقة زجاجية 3D) -->
+    <div class="hero-content hero-glass" id="hc-glass">
+      <div class="glass-card">
+        <div class="glass-icon">🍰</div>
+        <h1 class="hero-title" id="heroTitle2"
+            onmousedown="startHoldTimer(event)" onmouseup="clearHoldTimer()"
+            onmouseleave="clearHoldTimer()" ontouchstart="startHoldTimer(event)"
+            ontouchend="clearHoldTimer()" ontouchcancel="clearHoldTimer()"
+            style="cursor:default;user-select:none;">
+          دار الحلويات
+        </h1>
+        <p class="hero-tagline" id="heroTagline2">أرقى المعجنات والحلويات الشرقية والغربية</p>
+        <div class="glass-stats">
+          <div class="glass-stat"><i class="fas fa-star"></i> 4.9</div>
+          <div class="glass-stat"><i class="fas fa-utensils"></i> +50 صنف</div>
+          <div class="glass-stat"><i class="fas fa-clock"></i> يومي طازج</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- نموذج 3: SPLIT (نص يسار + صورة 3D يمين) -->
+    <div class="hero-content hero-split" id="hc-split">
+      <div class="split-text">
+        <div class="split-badge"><span>✦</span> حلويات فاخرة <span>✦</span></div>
+        <h1 class="hero-title" id="heroTitle3"
+            onmousedown="startHoldTimer(event)" onmouseup="clearHoldTimer()"
+            onmouseleave="clearHoldTimer()" ontouchstart="startHoldTimer(event)"
+            ontouchend="clearHoldTimer()" ontouchcancel="clearHoldTimer()"
+            style="cursor:default;user-select:none;">
+          دار<br/>الحلويات
+        </h1>
+        <p class="hero-tagline" id="heroTagline3">أرقى المعجنات والحلويات</p>
+        <div class="split-phone" id="heroPhone3"><i class="fas fa-phone"></i> +964 770 000 0000</div>
+      </div>
+      <div class="split-visual">
+        <div class="float-card fc1">🥐<span>كرواسون</span></div>
+        <div class="float-card fc2">🍰<span>كيك</span></div>
+        <div class="float-card fc3">☕<span>كابتشينو</span></div>
+        <div class="split-circle"></div>
+      </div>
+    </div>
+
+    <!-- زر تبديل النموذج -->
+    <button class="cycle-fab" onclick="cycleLayout()" id="layoutCycleBtn" title="تغيير النموذج">
+      <i class="fas fa-th-large"></i>
+    </button>
+    <!-- زر تبديل Hero -->
+    <button class="hero-style-fab" onclick="cycleHeroStyle()" id="heroStyleBtn" title="تغيير نموذج الواجهة">
+      <i class="fas fa-wand-magic-sparkles"></i>
+    </button>
+  </header>
+
+  <nav class="cat-nav" id="catNav">
+    <div class="cat-nav-inner">
+      <button class="cat-btn active" data-cat="all" onclick="filterCategory('all', this)">
+        <i class="fas fa-th"></i> الكل
+      </button>
+      <button class="cat-btn" data-cat="pastries" onclick="filterCategory('pastries', this)">
+        <i class="fas fa-bread-slice"></i> معجنات
+      </button>
+      <button class="cat-btn" data-cat="oriental" onclick="filterCategory('oriental', this)">
+        <i class="fas fa-moon"></i> شرقية
+      </button>
+      <button class="cat-btn" data-cat="western" onclick="filterCategory('western', this)">
+        <i class="fas fa-birthday-cake"></i> غربية
+      </button>
+      <button class="cat-btn" data-cat="drinks" onclick="filterCategory('drinks', this)">
+        <i class="fas fa-coffee"></i> مشروبات
+      </button>
+    </div>
+  </nav>
+
+  <main class="menu-main" id="menuMain">
+    <div class="menu-grid" id="menuGrid"></div>
+  </main>
+
+  <!-- ===== CART FAB ===== -->
+  <button class="cart-fab" id="cartFab" onclick="openCart()" style="display:none">
+    <i class="fas fa-shopping-basket"></i>
+    <span class="cart-fab-count" id="cartFabCount">0</span>
+    <span class="cart-fab-total" id="cartFabTotal"></span>
+  </button>
+
+  <!-- ===== CART DRAWER ===== -->
+  <div id="cartDrawer" class="cart-drawer hidden">
+    <div class="cart-overlay" onclick="closeCart()"></div>
+    <div class="cart-panel">
+      <div class="cart-header">
+        <h2><i class="fas fa-shopping-basket"></i> سلة الطلب</h2>
+        <button class="cart-close" onclick="closeCart()"><i class="fas fa-times"></i></button>
+      </div>
+
+      <!-- معلومات الزبون -->
+      <div class="cart-customer">
+        <div class="form-group">
+          <label><i class="fas fa-user"></i> اسم الزبون (اختياري)</label>
+          <input type="text" id="customerName" placeholder="مثال: أحمد محمد" />
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-chair"></i> رقم الطاولة (اختياري)</label>
+          <input type="text" id="tableNumber" placeholder="مثال: 5" />
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-comment"></i> ملاحظات</label>
+          <input type="text" id="orderNote" placeholder="مثال: بدون سكر" />
+        </div>
+      </div>
+
+      <!-- قائمة الأصناف في السلة -->
+      <div class="cart-items" id="cartItems">
+        <div class="cart-empty" id="cartEmpty">
+          <div style="font-size:3rem">🛒</div>
+          <p>السلة فارغة</p>
+          <span>اختر أصنافاً من المنيو</span>
+        </div>
+      </div>
+
+      <!-- ملخص -->
+      <div class="cart-summary" id="cartSummary" style="display:none">
+        <div class="summary-row"><span>المجموع الفرعي</span><span id="subtotalVal">0</span></div>
+        <div class="summary-row discount-row" id="discountRow" style="display:none">
+          <span>خصم <span id="discountPct"></span>%</span>
+          <span id="discountVal" style="color:#22C55E"></span>
+        </div>
+        <div class="summary-row summary-total"><span>الإجمالي</span><span id="totalVal">0</span></div>
+
+        <div class="cart-actions">
+          <button class="btn-print" onclick="printOrder()">
+            <i class="fas fa-print"></i> طباعة للكاشير
+          </button>
+          <button class="btn-clear" onclick="clearCart()">
+            <i class="fas fa-trash"></i> مسح
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PRINT PAGE ===== -->
+  <div id="printPage" class="print-page hidden">
+    <div class="receipt">
+      <div class="receipt-header">
+        <div class="receipt-logo">🍰</div>
+        <h2 id="receiptShopName">دار الحلويات</h2>
+        <p id="receiptTagline">أرقى المعجنات والحلويات</p>
+        <div class="receipt-divider">────────────────</div>
+      </div>
+
+      <div class="receipt-meta">
+        <div class="receipt-meta-row"><span>الوقت</span><span id="receiptTime"></span></div>
+        <div class="receipt-meta-row" id="receiptCustomerRow"><span>الزبون</span><span id="receiptCustomer"></span></div>
+        <div class="receipt-meta-row" id="receiptTableRow"><span>الطاولة</span><span id="receiptTable"></span></div>
+        <div class="receipt-meta-row" id="receiptNoteRow"><span>ملاحظة</span><span id="receiptNote"></span></div>
+      </div>
+
+      <div class="receipt-divider">────────────────</div>
+      <div class="receipt-items" id="receiptItems"></div>
+      <div class="receipt-divider">────────────────</div>
+
+      <div class="receipt-totals" id="receiptTotals"></div>
+      <div class="receipt-divider">════════════════</div>
+
+      <div class="receipt-footer">
+        <p>شكراً لزيارتكم 🌸</p>
+        <p id="receiptPhone"></p>
+      </div>
+
+      <div class="receipt-print-actions no-print">
+        <button onclick="window.print()" class="btn-do-print">
+          <i class="fas fa-print"></i> اطبع الآن
+        </button>
+        <button onclick="closeReceipt()" class="btn-close-receipt">
+          <i class="fas fa-times"></i> إغلاق
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-logo"><i class="fas fa-cookie-bite"></i> <span id="footerName">دار الحلويات</span></div>
+    <p class="footer-phone"><i class="fas fa-phone"></i> <span id="footerPhone">+964 770 000 0000</span></p>
+    <p class="footer-copy">© 2024 جميع الحقوق محفوظة</p>
+  </footer>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
